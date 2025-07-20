@@ -1,0 +1,13 @@
+{
+  "name": "shazil-sindhu-resume",
+  "version": "1.0.0",
+  "description": "Interactive career timeline resume for Shazil Sindhu",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve .",
+    "build": "echo 'Static site - no build needed'"
+  },
+  "keywords": ["resume", "product-manager", "career-timeline"],
+  "author": "Shazil Sindhu",
+  "license": "MIT"
+}
