@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shazil Sindhu - Career Timeline</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 300;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .header .tagline {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .header .contact {
+            font-size: 0.95em;
+            opacity: 0.8;
+        }
+
+        .career-map {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            height: 750px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .path {
+            position: absolute;
+            stroke: rgba(255,255,255,0.9);
+            stroke-width: 4;
+            fill: none;
+        }
+
+        .career-node {
+            position: absolute;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .career-node:hover {
+            transform: scale(1.05);
+            z-index: 100;
+        }
+
+        .node-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            color: white;
+            border: 3px solid white;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 10;
+        }
+
+        .education-node .node-icon {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+        }
+
+        .bridgeblue-node .node-icon {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+
+        .halfort-node .node-icon {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .stukent-node .node-icon {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+
+        .framework-node .node-icon {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+            50% { box-shadow: 0 8px 30px rgba(155,89,182,0.6); }
+            100% { box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+        }
+
+        .info-popup {
+            position: absolute;
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            min-width: 320px;
+            max-width: 380px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            transform: translateY(10px);
+            z-index: 20;
+        }
+
+        .career-node:hover .info-popup {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .popup-date {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .popup-title {
+            font-size: 1.4em;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .popup-company {
+            color: #667eea;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .popup-highlight {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .popup-achievement {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+
+        .popup-achievement .icon {
+            margin-right: 8px;
+            font-size: 1em;
+        }
+
+        .metric {
+            color: #e74c3c;
+            font-weight: 700;
+        }
+
+        .badges {
+            margin: 10px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin: 2px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        /* Positioning for nodes - adjusted positions */
+        .education-node {
+            left: 8%;
+            top: 68%;
+        }
+
+        .bridgeblue-node {
+            left: 22%;
+            top: 58%;
+        }
+
+        .halfort-node {
+            left: 42%;
+            top: 42%;
+        }
+
+        .stukent-node {
+            left: 65%;
+            top: 28%;
+        }
+
+        .framework-node {
+            left: 84%;
+            top: 18%;
+        }
+
+        /* Info popup positioning */
+        .education-node .info-popup {
+            left: 70px;
+            top: -10px;
+        }
+
+        .bridgeblue-node .info-popup {
+            left: -160px;
+            top: 70px;
+        }
+
+        .halfort-node .info-popup {
+            left: -200px;
+            top: -10px;
+        }
+
+        .stukent-node .info-popup {
+            left: -320px;
+            top: 70px;
+        }
+
+        .framework-node .info-popup {
+            left: -360px;
+            top: -10px;
+        }
+
+        .legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .legend h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            font-size: 0.9em;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid white;
+        }
+
+        .stats-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            min-width: 250px;
+        }
+
+        .stats-panel h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            text-align: center;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 12px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .stat-label {
+            color: #2c3e50;
+            font-size: 0.9em;
+        }
+
+        .stat-value {
+            color: #e74c3c;
+            font-weight: 700;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .career-map {
+                height: 600px;
+                padding: 20px;
+            }
+            
+            .info-popup {
+                position: fixed;
+                left: 50% !important;
+                top: 50% !important;
+                transform: translate(-50%, -50%) !important;
+                max-width: 90vw;
+                z-index: 1000;
+            }
+            
+            .stats-panel, .legend {
+                position: relative;
+                margin: 20px auto;
+                float: none;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Shazil Nazir Sindhu</h1>
+        <div class="tagline">Strategic SaaS Product Leader | AI-Driven Growth | 0→1 Execution</div>
+        <div class="contact">
+            📧 snsindhu@gmail.com | 📱 (804) 873-9174 | 💼 in/shazilsindhu | 🌐 scaleframework.notion.site
+        </div>
+    </div>
+
+    <div class="career-map">
+        <!-- Career Path SVG -->
+        <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
+            <!-- Smooth curved path through the positioned nodes -->
+            <path class="path" d="M 120 540 Q 180 520 310 460 Q 450 380 590 330 Q 720 260 890 210 Q 1000 170 1180 140" stroke="rgba(255,255,255,0.6)" stroke-width="3" fill="none"/>
+        </svg>
+
+        <!-- Education Node -->
+        <div class="career-node education-node">
+            <div class="node-icon">
+                🎓
+            </div>
+            <div class="info-popup">
+                <div class="popup-date">2007 - 2011</div>
+                <div class="popup-title">Foundation</div>
+                <div class="popup-company">Lahore School of Economics</div>
+                <div class="popup-achievement">
+                    <span class="icon">🎓</span> BBA (Hons) - Marketing & Finance
+                </div>
+                <div class="popup-achievement">
+                    <span class="icon">📊</span> Built strategic & analytical foundations
+                </div>
+                <div class="popup-achievement">
+                    <span class="icon">🌟</span> Honors graduate
+                </div>
+            </div>
+        </div>
+
+        <!-- AMS BridgeBlue Node -->
+        <div class="career-node bridgeblue-node">
+            <div class="node-icon">
+                🌏
+            </div>
+            <div class="info-popup">
+                <div class="popup-date">June 2015 - July 2019</div>
+                <div class="popup-title">Lead Product Manager</div>
+                <div class="popup-company">AMS BridgeBlue • Sydney, Australia</div>
+                <div class="badges">
+                    <span class="badge">🎓 EdTech</span>
+                    <span class="badge">🌏 International</span>
+                    <span class="badge">💼 B2B</span>
+                </div>
+                <div class="popup-highlight">
+                    Cross-university portal: <span class="metric">230% application increase</span>, <span class="metric">90% satisfaction</span>
+                </div>
+                <div class="popup-achievement">
+                    <span class="icon">💰</span> Generated <span class="metric">$17M+ revenue</span> via loyalty program
+                </div>
+                <div class="popup-achievement">
+                    <span class="icon">🌍</span> Led <span class="metric">3-country</span> international team
+                </div>
+                <div class="popup-achievement">
+                    <span class="icon">🚀</span> <span class="metric">40% velocity</span> increase, <span class="metric">30%</span> faster time-to-market
+                </div>
+            </div>
+        </div>
+
+        <!-- Halfort Node -->
+        <div class="career-node halfort-node">
+            <div class="node-icon">
+                ⚕️
+            </div>
+            <div class="info-popup">
+                <div class="popup-date">July 2019 - Sept 2023</div>
+                <div class="popup-title">Product Lead</div>
+                <div class="popup-company">Halfort LLC • Virginia</div>
+                <div class="badges">
+                    <span class="badge">💰 FinTech</span>
+                    <span class="badge">🏥 HealthTech</span>
+                    <span class="badge">📱 SaaS</span>
+                </div>
+                <div class="popup-highlight">
+                    Payment platform: <span class="metric">90K MAUs</span>, <span class="metric">$10M revenue Year 1</span>
+                </div>
+                <div class="popup-achievement">
+                    <span class="icon">💳</span> Patient payments up <span class="metric">150%</span>
+                </div>
+                <div class="popup-achievement">
+                    <span class="icon">📈</span> <span class="metric">+35 NPS</span> improvement
+                </div>
+                <div class="popup-achievement">
+                    <span class="icon">🎥</span> Telehealth: <span class="metric">50% YoY</span> engagement boost
+                </div>
+            </div>
+        </div>
+
+        <!-- Stukent Node -->
+        <div class="career-node stukent-node">
+            <div class="node-icon">
+                🚀
+            </div>
+            <div class="info-popup">
+                <div class="popup-date">Oct 2019 - Present</div>
+                <div class="popup-title">Group Product Manager</div>
+                <div class="popup-company">Stukent • Idaho Falls</div>
+                <div class="badges">
+                    <span class="badge">🤖 AI Innovation</span>
+                    <span class="badge">📊 Analytics</span>
+                    <span class="badge">🎓 EdTech</span>
+                </div>
+                <div class="popup-highlight">
+                    AI algorithms: <span class="metric">140% engagement</span> increase
+                </div>
+                <div class="popup-achievement">
+                    <span class="icon">🎯</span> <span class="metric">1M+ students</span>, <span class="metric">30% YoY</span> revenue growth
+                </div>
+                <div class="popup-achievement">
+                    <span class="icon">🚀</span> Google Classroom: <span class="metric">80%</span> market expansion
+                </div>
+                <div class="popup-achievement">
+                    <span class="icon">👥</span> Led <span class="metric">20+ team</span>, <span class="metric">50%</span> less delays
+                </div>
+                <div class="popup-achievement">
+                    <span class="icon">🐛</span> Bug bash: <span class="metric">40%</span> fewer issues
+                </div>
+            </div>
+        </div>
+
+        <!-- S.C.A.L.E Framework Node -->
+        <div class="career-node framework-node">
+            <div class="node-icon">
+                🧠
+            </div>
+            <div class="info-popup">
+                <div class="popup-date">2024 - Present</div>
+                <div class="popup-title">S.C.A.L.E Framework</div>
+                <div class="popup-company">Thought Leadership</div>
+                <div class="badges">
+                    <span class="badge">🚀 Innovation</span>
+                    <span class="badge">📚 Published</span>
+                    <span class="badge">💡 Framework</span>
+                </div>
+                <div class="popup-highlight">
+                    Comprehensive PM framework: Scalable, Customizable, Agile, Lean Execution
+                </div>
+                <div class="popup-achievement">
+                    <span class="icon">📉</span> <span class="metric">20-45%</span> reduction in project delays
+                </div>
+                <div class="popup-achievement">
+                    <span class="icon">📈</span> <span class="metric">15-30%</span> increase in on-time delivery
+                </div>
+                <div class="popup-achievement">
+                    <span class="icon">🌍</span> Adopted across multiple organizations
+                </div>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <h3>🎯 Career Journey</h3>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #34495e, #2c3e50);"></div>
+                <span>Education & Foundation</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #3498db, #2980b9);"></div>
+                <span>International Experience</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #e74c3c, #c0392b);"></div>
+                <span>HealthTech Leadership</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #f39c12, #e67e22);"></div>
+                <span>AI & EdTech Innovation</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);"></div>
+                <span>Thought Leadership</span>
+            </div>
+        </div>
+
+        <!-- Stats Panel -->
+        <div class="stats-panel">
+            <h3>🏆 Career Impact</h3>
+            <div class="stat-item">
+                <span class="stat-label">Total Users Served</span>
+                <span class="stat-value">1M+</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Revenue Generated</span>
+                <span class="stat-value">$27M+</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Team Members Led</span>
+                <span class="stat-value">20+</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Countries Worked</span>
+                <span class="stat-value">3</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Years Experience</span>
+                <span class="stat-value">13+</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Framework Created</span>
+                <span class="stat-value">S.C.A.L.E</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Hover interactions for info popups
+        document.addEventListener('DOMContentLoaded', function() {
+            const nodes = document.querySelectorAll('.career-node');
+            
+            nodes.forEach(node => {
+                // Hover effects and popup control
+                node.addEventListener('mouseenter', function() {
+                    this.style.zIndex = '1000';
+                    this.style.transform = 'scale(1.05)';
+                    
+                    // Show popup on hover
+                    const popup = this.querySelector('.info-popup');
+                    popup.style.opacity = '1';
+                    popup.style.visibility = 'visible';
+                });
+                
+                node.addEventListener('mouseleave', function() {
+                    this.style.zIndex = '10';
+                    this.style.transform = 'scale(1)';
+                    
+                    // Hide popup when leaving
+                    const popup = this.querySelector('.info-popup');
+                    popup.style.opacity = '0';
+                    popup.style.visibility = 'hidden';
+                });
+            });
+
+            // Click handling for mobile devices
+            nodes.forEach(node => {
+                node.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const popup = this.querySelector('.info-popup');
+                    
+                    // Close other popups
+                    nodes.forEach(otherNode => {
+                        if (otherNode !== this) {
+                            const otherPopup = otherNode.querySelector('.info-popup');
+                            otherPopup.style.opacity = '0';
+                            otherPopup.style.visibility = 'hidden';
+                        }
+                    });
+                    
+                    // Toggle current popup
+                    const isVisible = popup.style.opacity === '1';
+                    popup.style.opacity = isVisible ? '0' : '1';
+                    popup.style.visibility = isVisible ? 'hidden' : 'visible';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
